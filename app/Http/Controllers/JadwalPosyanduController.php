@@ -22,15 +22,14 @@ class JadwalPosyanduController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'jadwal_id'   => 'required|integer|unique:jadwal_posyandu',
-            'posyandu_id' => 'required|exists:posyandu,posyandu_id',
+    'posyandu_id' => 'required|exists:posyandu,posyandu_id',
             'tanggal'     => 'required|date',
             'tema'        => 'required|string',
             'keterangan'  => 'nullable|string',
         ]);
 
         JadwalPosyandu::create($request->all());
-        return redirect()->route('jadwal-posyandu.index')->with('success', 'Data berhasil disimpan.');
+        return redirect()->route('jadwal_posyandu.index')->with('success', 'Data berhasil disimpan.');
     }
 
     public function edit(JadwalPosyandu $jadwalPosyandu)
@@ -42,19 +41,19 @@ class JadwalPosyanduController extends Controller
     public function update(Request $request, JadwalPosyandu $jadwalPosyandu)
     {
         $request->validate([
-            'posyandu_id' => 'required|exists:posyandu,id',
+'posyandu_id' => 'required|exists:posyandu,posyandu_id',
             'tanggal'     => 'required|date',
             'tema'        => 'required|string',
             'keterangan'  => 'nullable|string',
         ]);
 
         $jadwalPosyandu->update($request->all());
-        return redirect()->route('jadwal-posyandu.index')->with('success', 'Data berhasil diupdate.');
+        return redirect()->route('jadwal_posyandu.index')->with('success', 'Data berhasil diupdate.');
     }
 
     public function destroy(JadwalPosyandu $jadwalPosyandu)
     {
         $jadwalPosyandu->delete();
-        return redirect()->route('jadwal-posyandu.index')->with('success', 'Data berhasil dihapus.');
+        return redirect()->route('jadwal_posyandu.index')->with('success', 'Data berhasil dihapus.');
     }
 }
