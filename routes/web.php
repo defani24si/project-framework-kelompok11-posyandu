@@ -11,4 +11,3 @@ Route::get('/', function () {
 
 Route::resource('posyandu', PosyanduController::class);
 Route::resource('jadwal_posyandu', JadwalPosyanduController::class);
-

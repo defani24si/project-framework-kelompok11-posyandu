@@ -11,9 +11,8 @@ class JadwalPosyandu extends Model
 
     protected $table = 'jadwal_posyandu';
 
-    // Primary key sesuai tabel
     protected $primaryKey = 'jadwal_id';
-    public $incrementing = true;  // auto-increment
+    public $incrementing = true;  
     protected $keyType = 'int';
 
     protected $fillable = [
@@ -23,7 +22,6 @@ class JadwalPosyandu extends Model
         'keterangan'
     ];
 
-    // Relasi ke Posyandu
     public function posyandu()
     {
         return $this->belongsTo(Posyandu::class, 'posyandu_id', 'posyandu_id');

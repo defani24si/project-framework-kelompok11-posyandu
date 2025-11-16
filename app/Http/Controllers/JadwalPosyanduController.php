@@ -22,7 +22,7 @@ class JadwalPosyanduController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-    'posyandu_id' => 'required|exists:posyandu,posyandu_id',
+            'posyandu_id' => 'required|exists:posyandu,posyandu_id',
             'tanggal'     => 'required|date',
             'tema'        => 'required|string',
             'keterangan'  => 'nullable|string',

@@ -314,7 +314,6 @@ return [
         'type' => 'sidebar-menu-search',
         'text' => 'Cari Menu',
     ],
-
     // Menu utama
     [
         'text'   => 'Posyandu',
