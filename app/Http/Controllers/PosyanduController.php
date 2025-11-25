@@ -7,11 +7,30 @@ use Illuminate\Http\Request;
 
 class PosyanduController extends Controller
 {
-    public function index()
-    {
-        $posyandus = Posyandu::paginate(10);
-        return view('posyandu.index', compact('posyandus'));
+     public function index(Request $request)
+{
+    $query = Posyandu::query();
+    
+    if ($request->filled('rt')) {
+        $query->where('rt', $request->rt);
     }
+    
+    if ($request->filled('rw')) {
+        $query->where('rw', $request->rw);
+    }
+    
+    if ($request->filled('search')) {
+        $searchTerm = $request->search;
+        $query->where(function($q) use ($searchTerm) {
+            $q->where('nama', 'like', "%{$searchTerm}%")
+              ->orWhere('alamat', 'like', "%{$searchTerm}%");
+        });
+    }
+    
+    $posyandus = $query->paginate(10)->withQueryString();
+    
+    return view('posyandu.index', compact('posyandus'));
+}  
 
     public function create()
     {

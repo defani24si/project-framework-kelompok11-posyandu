@@ -26,4 +26,14 @@ class JadwalPosyandu extends Model
     {
         return $this->belongsTo(Posyandu::class, 'posyandu_id', 'posyandu_id');
     }
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'jadwal_id';
+    }
 }

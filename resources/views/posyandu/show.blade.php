@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Show Posyandu')
+@section('title', 'Detail Posyandu')
 
 @section('content_header')
-    <h1>Show Posyandu</h1>
+    <h1>Detail Posyandu</h1>
 @stop
 
 @section('content')
@@ -11,7 +11,7 @@
         <div class="card-body">
             <table class="table table-bordered">
                 <tr>
-                    <th>Nama Posyandu</th>
+                    <th width="200">Nama Posyandu</th>
                     <td>{{ $posyandu->nama }}</td>
                 </tr>
                 <tr>
@@ -31,7 +31,7 @@
                     <td>{{ $posyandu->kontak }}</td>
                 </tr>
             </table>
-            <a href="{{ route('posyandu.index') }}" class="btn btn-secondary">Back</a>
+            <a href="{{ route('posyandu.index') }}" class="btn btn-secondary">Kembali</a>
         </div>
     </div>
 @stop

@@ -11,22 +11,11 @@ class Posyandu extends Model
 
     protected $table = 'posyandu';
 
-    // Primary key sesuai tabel
     protected $primaryKey = 'posyandu_id';
-    public $incrementing = true;   // auto-increment
-    protected $keyType = 'int';    // tipe integer
+    public $incrementing = true;
+    protected $keyType = 'int';
 
     protected $fillable = [
-        'nama',
-        'alamat',
-        'rt',
-        'rw',
-        'kontak'
+        'nama', 'alamat', 'rt', 'rw', 'kontak'
     ];
-
-    // Relasi ke jadwal
-    public function jadwals()
-    {
-        return $this->hasMany(JadwalPosyandu::class, 'posyandu_id', 'posyandu_id');
-    }
 }

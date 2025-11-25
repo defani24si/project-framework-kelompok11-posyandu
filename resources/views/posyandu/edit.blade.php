@@ -10,12 +10,12 @@
     <div class="card">
         <div class="card-body">
             <form action="{{ route('posyandu.update', $posyandu->posyandu_id) }}" method="POST">
-    @csrf
-    @method('PUT')
-    @include('posyandu.partials.form')  <!-- TANPA 's' -->
-    <button type="submit" class="btn btn-primary">Update</button>
-    <a href="{{ route('posyandu.index') }}" class="btn btn-secondary">Kembali</a>
-</form>
+                @csrf
+                @method('PUT')
+                @include('posyandu.partials.form')
+                <button type="submit" class="btn btn-primary">Update</button>
+                <a href="{{ route('posyandu.index') }}" class="btn btn-secondary">Kembali</a>
+            </form>
         </div>
     </div>
 @stop
