@@ -16,6 +16,6 @@ class Posyandu extends Model
     protected $keyType = 'int';
 
     protected $fillable = [
-        'nama', 'alamat', 'rt', 'rw', 'kontak'
+        'nama', 'alamat', 'rt', 'rw', 'kontak', 'foto', 'files'
     ];
 }

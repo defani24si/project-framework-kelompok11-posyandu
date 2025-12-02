@@ -82,6 +82,7 @@
                     <thead>
                         <tr>
                             <th width="60">No</th>
+                            <th width="80">Foto</th>
                             <th>Nama Posyandu</th>
                             <th>Alamat</th>
                             <th>RT/RW</th>
@@ -93,6 +94,20 @@
                     @forelse($posyandus as $item)
                         <tr>
                             <td>{{ ($posyandus->currentPage() - 1) * $posyandus->perPage() + $loop->iteration }}</td>
+                            <td class="text-center">
+                                @if($item->foto)
+                                    <img src="{{ asset('storage/' . $item->foto) }}" 
+                                         alt="Foto Posyandu" 
+                                         class="img-circle img-size-50"
+                                         style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;"
+                                         onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'50\' height=\'50\'%3E%3Crect width=\'50\' height=\'50\' fill=\'%236c757d\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dy=\'.3em\' fill=\'white\'%3E%3C/text%3E%3C/svg%3E';">
+                                @else
+                                    <div class="img-circle img-size-50 bg-secondary d-flex align-items-center justify-content-center" 
+                                         style="width: 50px; height: 50px; border-radius: 50%;">
+                                        <i class="fa fa-building text-white"></i>
+                                    </div>
+                                @endif
+                            </td>
                             <td>{{ $item->nama }}</td>
                             <td>{{ $item->alamat }}</td>
                             <td>RT {{ $item->rt }} / RW {{ $item->rw }}</td>
@@ -122,7 +137,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center text-muted py-4">
+                            <td colspan="7" class="text-center text-muted py-4">
                                 <i class="fa fa-database fa-2x mb-2"></i><br>
                                 Tidak ada data posyandu
                             </td>

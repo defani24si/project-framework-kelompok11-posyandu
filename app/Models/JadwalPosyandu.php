@@ -12,25 +12,24 @@ class JadwalPosyandu extends Model
     protected $table = 'jadwal_posyandu';
 
     protected $primaryKey = 'jadwal_id';
-    public $incrementing = true;  
-    protected $keyType = 'int';
 
     protected $fillable = [
         'posyandu_id',
         'tanggal',
         'tema',
-        'keterangan'
+        'keterangan',
     ];
 
+    /**
+     * Relasi ke tabel Posyandu.
+     */
     public function posyandu()
     {
         return $this->belongsTo(Posyandu::class, 'posyandu_id', 'posyandu_id');
     }
 
     /**
-     * Get the route key for the model.
-     *
-     * @return string
+     * Gunakan kolom jadwal_id untuk route model binding.
      */
     public function getRouteKeyName()
     {

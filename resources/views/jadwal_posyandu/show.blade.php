@@ -9,10 +9,26 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-           <p><strong>Nama Posyandu:</strong> {{ $jadwal->posyandu?->nama_posyandu ?? 'Data Posyandu Tidak Ditemukan' }}</p>
-           <p><strong>Tanggal:</strong> {{ $jadwal->tanggal }}</p>
-           <p><strong>Waktu:</strong> {{ $jadwal->waktu }}</p>
-
+            <table class="table table-bordered">
+                <tr>
+                    <th width="200">Nama Posyandu</th>
+                    <td>{{ $jadwalPosyandu->posyandu->nama ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <th>Tanggal</th>
+                    <td>{{ \Carbon\Carbon::parse($jadwalPosyandu->tanggal)->format('d/m/Y') }}</td>
+                </tr>
+                <tr>
+                    <th>Tema</th>
+                    <td>{{ $jadwalPosyandu->tema }}</td>
+                </tr>
+                <tr>
+                    <th>Keterangan</th>
+                    <td>{{ $jadwalPosyandu->keterangan ?? '-' }}</td>
+                </tr>
+            </table>
+            <a href="{{ route('jadwal_posyandu.index') }}" class="btn btn-secondary">Kembali</a>
+            <a href="{{ route('jadwal_posyandu.edit', $jadwalPosyandu->jadwal_id) }}" class="btn btn-primary">Edit</a>
         </div>
     </div>
 @stop

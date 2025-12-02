@@ -47,3 +47,24 @@
         <span class="text-danger">{{ $message }}</span>
     @enderror
 </div>
+
+<div class="form-group">
+    <label for="foto">Foto Posyandu</label>
+    @if(isset($posyandu) && $posyandu->foto)
+        <div class="mb-2">
+            <p>Foto Saat Ini:</p>
+            <img src="{{ asset('storage/' . $posyandu->foto) }}" 
+                 alt="Foto Posyandu" 
+                 class="img-thumbnail"
+                 style="max-width: 200px; max-height: 200px; object-fit: cover;"
+                 onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <p class="text-danger" style="display:none;">Gagal memuat foto. Silakan upload ulang.</p>
+        </div>
+    @endif
+    <input type="file" name="foto" id="foto" class="form-control" 
+           accept="image/jpeg,image/png,image/jpg,image/gif">
+    <small class="form-text text-muted">Format: JPG, PNG, GIF. Maksimal 2MB</small>
+    @error('foto')
+        <span class="text-danger">{{ $message }}</span>
+    @enderror
+</div>
