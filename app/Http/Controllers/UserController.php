@@ -37,10 +37,16 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+            'role' => 'required|in:admin,user,kader',
             'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $data = $request->only(['name', 'email']);
+        $data = $request->only(['name', 'email', 'role']);
+        
+        // Set default role jika tidak diisi
+        if (empty($data['role'])) {
+            $data['role'] = 'user';
+        }
         
         if ($request->hasFile('foto_profil')) {
             $file = $request->file('foto_profil');
@@ -77,10 +83,11 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $id,
             'password' => 'nullable|string|min:8|confirmed',
+            'role' => 'required|in:admin,user,kader',
             'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $data = $request->only(['name', 'email']);
+        $data = $request->only(['name', 'email', 'role']);
         
         // Handle foto profil upload
         if ($request->hasFile('foto_profil')) {

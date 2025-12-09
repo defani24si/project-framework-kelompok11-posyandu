@@ -49,6 +49,19 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="role">Role</label>
+                    <select name="role" id="role" class="form-control" required>
+                        <option value="">Pilih Role</option>
+                        <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
+                        <option value="user" {{ old('role', $user->role) == 'user' ? 'selected' : '' }}>User</option>
+                        <option value="kader" {{ old('role', $user->role) == 'kader' ? 'selected' : '' }}>Kader</option>
+                    </select>
+                    @error('role')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="form-group">
                     <label for="foto_profil">Foto Profil</label>
                     <div class="mb-2">
                         @if($user->foto_profil)

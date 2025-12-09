@@ -314,7 +314,44 @@ return [
         'type' => 'sidebar-menu-search',
         'text' => 'Cari Menu',
     ],
+    
+    // TAMBAHKAN MENU DASHBOARD DI SINI
+    [
+        'text'   => 'Dashboard',
+        'url'    => 'dashboard', // atau 'home'
+        'icon'   => 'fas fa-tachometer-alt',
+        'active' => ['dashboard', 'home'], // aktif jika route dashboard atau home
+    ],
+     [
+        'text'    => 'Manajemen User',
+        'icon'    => 'fas fa-users',
+        'can'     => 'admin', // Hanya admin yang bisa akses
+        'submenu' => [
+            [
+                'text' => 'Daftar User',
+                'url'  => 'users',
+                'icon' => 'fas fa-list',
+            ],
+            [
+                'text' => 'Tambah User',
+                'url'  => 'users/create',
+                'icon' => 'fas fa-plus-circle',
+            ],
+            [
+                'text' => 'Role & Permission',
+                'url'  => 'users/roles',
+                'icon' => 'fas fa-user-shield',
+            ],
+        ],
+    ],
+    
     // Menu utama
+  [
+        'text' => 'Kelola User',
+        'url'  => '/users',             // atau route('users.index')
+        'icon' => 'fas fa-users',
+        'active' => ['users', 'users/*'],
+    ],
     [
         'text'   => 'Posyandu',
         'url'    => 'posyandu',
@@ -388,7 +425,6 @@ return [
         'url'        => '#',
     ],
 ],
-
 
     /*
     |--------------------------------------------------------------------------

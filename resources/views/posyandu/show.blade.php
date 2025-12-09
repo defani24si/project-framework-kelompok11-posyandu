@@ -85,7 +85,9 @@
             </div>
             <div class="mt-3">
                 <a href="{{ route('posyandu.index') }}" class="btn btn-secondary">Kembali</a>
+                @if(Auth::check() && Auth::user()->role === 'admin')
                 <a href="{{ route('posyandu.edit', $posyandu->posyandu_id) }}" class="btn btn-primary">Edit</a>
+                @endif
             </div>
         </div>
     </div>

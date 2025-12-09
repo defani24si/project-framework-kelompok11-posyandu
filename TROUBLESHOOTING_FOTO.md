@@ -108,3 +108,26 @@ php artisan view:clear
 6. **app/Http/Controllers/UserController.php**
    - Mengganti `$request->all()` dengan `$request->only()` untuk menghindari konflik
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

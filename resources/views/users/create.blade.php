@@ -44,6 +44,19 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="role">Role</label>
+                    <select name="role" id="role" class="form-control" required>
+                        <option value="">Pilih Role</option>
+                        <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                        <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>User</option>
+                        <option value="kader" {{ old('role') == 'kader' ? 'selected' : '' }}>Kader</option>
+                    </select>
+                    @error('role')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="form-group">
                     <label for="foto_profil">Foto Profil</label>
                     <input type="file" name="foto_profil" id="foto_profil" class="form-control" 
                            accept="image/jpeg,image/png,image/jpg,image/gif">
@@ -61,4 +74,21 @@
         </div>
     </div>
 @stop
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -359,3 +359,26 @@ Pastikan juga membuat symbolic link untuk storage:
 php artisan storage:link
 ```
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

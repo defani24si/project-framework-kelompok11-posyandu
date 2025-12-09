@@ -27,7 +27,9 @@ class PosyanduSeeder extends Seeder
             ],
             [
                 'posyandu_id' => 'POS004',
-                'nama'        => 'Posyandu Kamboja',
+                'nama'        => 'Posyandu Kambo
+                
+                ja',
                 'alamat'      => 'Jl. Kamboja No. 4',
             ],
         ];

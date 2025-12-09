@@ -22,6 +22,7 @@ class User extends Authenticatable
         'email',
         'password',
         'foto_profil',
+        'role',
     ];
 
     /**
@@ -45,5 +46,32 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get the adminlte image for AdminLTE user menu
+     */
+    public function adminlte_image()
+    {
+        if ($this->foto_profil) {
+            return asset('storage/' . $this->foto_profil);
+        }
+        return null; // AdminLTE will use default avatar
+    }
+
+    /**
+     * Get the adminlte desc for AdminLTE user menu
+     */
+    public function adminlte_desc()
+    {
+        return ucfirst($this->role);
+    }
+
+    /**
+     * Get the adminlte profile url for AdminLTE user menu
+     */
+    public function adminlte_profile_url()
+    {
+        return route('profile');
     }
 }

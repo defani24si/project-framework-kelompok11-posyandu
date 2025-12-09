@@ -14,11 +14,13 @@
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Daftar Posyandu</h3>
+            @if(Auth::check() && Auth::user()->role === 'admin')
             <div class="card-tools">
                 <a href="{{ route('posyandu.create') }}" class="btn btn-primary btn-sm">
                     <i class="fa fa-plus"></i> Tambah Posyandu
                 </a>
             </div>
+            @endif
         </div>
         <div class="card-body">
             <!-- FORM FILTER & SEARCH -->
@@ -119,12 +121,13 @@
                                         <i class="fa fa-eye"></i>
                                     </a>
 
-                                    <!-- TOMBOL EDIT -->
+                                    @if(Auth::check() && Auth::user()->role === 'admin')
+                                    <!-- TOMBOL EDIT - Hanya untuk Admin -->
                                     <a href="{{ route('posyandu.edit', $item->posyandu_id) }}" class="btn btn-warning btn-sm">
                                         <i class="fa fa-edit"></i>
                                     </a>
 
-                                    <!-- TOMBOL DELETE -->
+                                    <!-- TOMBOL DELETE - Hanya untuk Admin -->
                                     <form action="{{ route('posyandu.destroy', $item->posyandu_id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
@@ -132,6 +135,7 @@
                                             <i class="fa fa-trash"></i>
                                         </button>
                                     </form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

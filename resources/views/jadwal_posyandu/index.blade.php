@@ -14,11 +14,13 @@
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Daftar Jadwal Posyandu</h3>
+            @if(Auth::check() && Auth::user()->role === 'admin')
             <div class="card-tools">
                 <a href="{{ route('jadwal_posyandu.create') }}" class="btn btn-primary btn-sm">
                     <i class="fa fa-plus"></i> Tambah Jadwal
                 </a>
             </div>
+            @endif
         </div>
         <div class="card-body">
             <!-- FORM FILTER & SEARCH -->
@@ -117,6 +119,7 @@
                                     <a href="{{ route('jadwal_posyandu.show', $item->jadwal_id) }}" class="btn btn-info btn-sm">
                                         <i class="fa fa-eye"></i>
                                     </a>
+                                    @if(Auth::check() && Auth::user()->role === 'admin')
                                     <a href="{{ route('jadwal_posyandu.edit', $item->jadwal_id) }}" class="btn btn-warning btn-sm">
                                         <i class="fa fa-edit"></i>
                                     </a>
@@ -127,6 +130,7 @@
                                             <i class="fa fa-trash"></i>
                                         </button>
                                     </form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

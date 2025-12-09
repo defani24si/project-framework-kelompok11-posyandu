@@ -28,7 +28,9 @@
                 </tr>
             </table>
             <a href="{{ route('jadwal_posyandu.index') }}" class="btn btn-secondary">Kembali</a>
+            @if(Auth::check() && Auth::user()->role === 'admin')
             <a href="{{ route('jadwal_posyandu.edit', $jadwalPosyandu->jadwal_id) }}" class="btn btn-primary">Edit</a>
+            @endif
         </div>
     </div>
 @stop
