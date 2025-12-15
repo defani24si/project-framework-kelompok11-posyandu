@@ -1,148 +1,154 @@
 @extends('layout.auth.app')
 @section('content')
-    <div class="bg-white shadow border-0 rounded border-light p-4 p-lg-5 w-100 fmxw-500">
-        <div class="text-center text-md-center mb-4 mt-md-0">
-            <h1 class="mb-2 h3">Sistem Informasi Posyandu</h1>
-            <p class="text-gray-600">Masuk untuk mengelola data kesehatan</p>
-        </div>
-        
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul class="mb-0">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+    <div class="login-container">
+        <div class="login-card">
+            <!-- Header dengan Gradient Biru -->
+            <div class="card-header">
+                <div class="header-icon">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <h1>Sistem Informasi Posyandu</h1>
+                <p>Masuk untuk mengelola data kesehatan masyarakat</p>
             </div>
-        @endif
 
-        <form action="{{ route('auth.login') }}" method="POST" class="mt-4">
-            @csrf
-            <!-- Email Input -->
-            <div class="form-group mb-4">
-                <label for="email">Alamat Email</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-light-primary border-light-primary">
-                        <svg class="icon icon-xs text-primary" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" style="width: 16px; height: 16px;">
-                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
-                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
-                        </svg>
-                    </span>
-                    <input type="email" name="email" class="form-control border-light-primary" placeholder="hama@email.com" id="email" autofocus>
+            <!-- Body Form -->
+            <div class="card-body">
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <ul class="mb-0" style="list-style: none; padding-left: 0;">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <form action="{{ route('auth.login') }}" method="POST">
+                    @csrf
+                    
+                    <!-- Email Input -->
+                    <div class="form-group">
+                        <label for="email" class="form-label">
+                            <i class="fas fa-envelope me-2"></i>Alamat Email
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-user"></i>
+                            </span>
+                            <input type="email" 
+                                   name="email" 
+                                   id="email" 
+                                   class="form-control" 
+                                   placeholder="Masukkan email Anda"
+                                   value="{{ old('email') }}"
+                                   required 
+                                   autofocus>
+                        </div>
+                    </div>
+                    
+                    <!-- Password Input -->
+                    <div class="form-group">
+                        <label for="password" class="form-label">
+                            <i class="fas fa-lock me-2"></i>Kata Sandi
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-key"></i>
+                            </span>
+                            <input type="password" 
+                                   name="password" 
+                                   id="password" 
+                                   class="form-control" 
+                                   placeholder="Masukkan kata sandi"
+                                   required>
+                            <span class="input-group-text password-toggle" onclick="togglePassword()">
+                                <i class="fas fa-eye" id="toggleIcon"></i>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Remember Me & Forgot Password -->
+                    <div class="form-check">
+                        <div class="form-check-content">
+                            <input class="form-check-input" type="checkbox" name="remember" id="remember">
+                            <label class="form-check-label" for="remember">
+                                Ingat saya
+                            </label>
+                        </div>
+                        <a href="#" class="forgot-password">Lupa kata sandi?</a>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt me-2"></i>
+                        Masuk ke Sistem
+                    </button>
+                </form>
+
+                <!-- Divider -->
+                <div class="divider">
+                    <span>atau</span>
+                </div>
+
+                <!-- Social Login -->
+                <div class="social-login">
+                    <a href="#" class="social-btn social-btn-facebook" title="Login dengan Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="social-btn social-btn-twitter" title="Login dengan Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-btn social-btn-github" title="Login dengan GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+
+                <!-- Register Link -->
+                <div class="register-link">
+                    Belum punya akun? <a href="#">Daftar sekarang</a>
                 </div>
             </div>
-            
-            <!-- Password Input -->
-            <div class="form-group mb-4">
-                <label for="password">Kata Sandi</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-light-primary border-light-primary">
-                        <svg class="icon icon-xs text-primary" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" style="width: 16px; height: 16px;">
-                            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
-                        </svg>
-                    </span>
-                    <input type="password" name="password" placeholder="Masukkan kata sandi" class="form-control border-light-primary" id="password">
+
+            <!-- Footer -->
+            <div class="card-footer">
+                <p>&copy; 2024 Sistem Informasi Posyandu. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#">Kebijakan Privasi</a>
+                    <a href="#">Syarat & Ketentuan</a>
+                    <a href="#">Bantuan</a>
                 </div>
             </div>
-            
-            <!-- Remember Me & Forgot Password -->
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="remember" id="remember">
-                    <label class="form-check-label mb-0" for="remember">
-                        Ingat saya
-                    </label>
-                </div>
-                <div>
-                    <a href="{{ url('/forgot-password') }}" class="small text-primary">Lupa kata sandi?</a>
-                </div>
-            </div>
-            
-            <!-- Submit Button -->
-            <div class="d-grid">
-                <button type="submit" class="btn btn-primary btn-block" style="background-color: #3b7ddd; border-color: #3b7ddd;">Masuk ke Sistem</button>
-            </div>
-        </form>
-        
-        <!-- Registration Link -->
-        <div class="d-flex justify-content-center align-items-center mt-4">
-            <span class="fw-normal">
-                Belum punya akun? <a href="{{ url('/register') }}" class="fw-bold text-primary">Daftar disini</a>
-            </span>
         </div>
     </div>
 
-    <style>
-        /* Warna sesuai konfigurasi Anda */
-        :root {
-            --primary-color: #3b7ddd; /* Biru tua */
-            --light-primary-color: #e3ebf7; /* Biru muda untuk sidebar */
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggleIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
         }
-        
-        .bg-primary {
-            background-color: var(--primary-color) !important;
-        }
-        
-        .text-primary {
-            color: var(--primary-color) !important;
-        }
-        
-        .border-primary {
-            border-color: var(--primary-color) !important;
-        }
-        
-        .bg-light-primary {
-            background-color: var(--light-primary-color) !important;
-        }
-        
-        .border-light-primary {
-            border-color: var(--light-primary-color) !important;
-        }
-        
-        .sidebar-light-primary {
-            background-color: var(--light-primary-color) !important;
-        }
-        
-        /* Tombol primary */
-        .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-        
-        .btn-primary:hover {
-            background-color: #2c6bc7;
-            border-color: #2c6bc7;
-        }
-        
-        /* Input focus styling */
-        .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.2rem rgba(59, 125, 221, 0.25);
-        }
-        
-        /* Checkbox styling */
-        .form-check-input:checked {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-        
-        /* Link hover */
-        a.text-primary:hover {
-            color: #2c6bc7 !important;
-        }
-        
-        /* Layout */
-        .fmxw-500 {
-            max-width: 500px;
-        }
-        
-        .btn-block {
-            width: 100%;
-        }
-        
-        /* Margin untuk form lebih rapi */
-        .mt-4 {
-            margin-top: 1.5rem !important;
-        }
-    </style>
+
+
+
+        // Form validation
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (!email || !password) {
+                e.preventDefault();
+                alert('Mohon lengkapi semua field yang diperlukan');
+            }
+        });
+    </script>
 @endsection

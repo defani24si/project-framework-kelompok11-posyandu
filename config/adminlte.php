@@ -364,48 +364,30 @@ return [
         'icon'   => 'fas fa-calendar-alt',
         'active' => ['jadwal_posyandu*'],
     ],
-
-    // Menu tambahan
     [
-        'text'   => 'Ibu & Balita',
-        'url'    => 'ibu_balita',
-        'icon'   => 'fas fa-baby',
-        'active' => ['ibu_balita*'],
-    ],
-    [
-        'text'   => 'Artikel Kesehatan',
-        'url'    => 'artikel_kesehatan',
-        'icon'   => 'fas fa-notes-medical',
-        'active' => ['artikel_kesehatan*'],
-    ],
-
-    // Profil & pengaturan
-    [
-        'text' => 'Profil',
-        'url'  => 'admin/settings',
-        'icon' => 'fas fa-user',
-    ],
-    [
-        'text' => 'Ganti Kata Sandi',
-        'url'  => 'admin/settings',
-        'icon' => 'fas fa-lock',
-    ],
-
-    // Submenu laporan
-    [
-        'text'    => 'Laporan Kesehatan',
-        'icon'    => 'fas fa-chart-line',
-        'submenu' => [
-            [
-                'text' => 'Laporan Bulanan',
-                'url'  => '#',
-            ],
-            [
-                'text' => 'Laporan Tahunan',
-                'url'  => '#',
-            ],
-        ],
-    ],
+    'text'   => 'Kader Posyandu',
+    'url'    => 'kader-posyandu',
+    'icon'   => 'fas fa-user-nurse',
+    'active' => ['kader-posyandu*'],
+],
+[
+    'text'   => 'Layanan Posyandu',
+    'url'    => 'layanan-posyandu',
+    'icon'   => 'fas fa-hand-holding-medical',
+    'active' => ['layanan-posyandu*'],
+],
+[
+    'text'   => 'Catatan Imunisasi',
+    'url'    => 'catatan-imunisasi',
+    'icon'   => 'fas fa-syringe',
+    'active' => ['catatan-imunisasi*'],
+],
+[
+    'text'   => 'Data Warga',
+    'url'    => 'warga',
+    'icon'   => 'fas fa-user-friends',
+    'active' => ['warga*'],
+],
 
     // Header info tambahan
     ['header' => 'Info & Tips'],

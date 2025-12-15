@@ -6,6 +6,10 @@ use App\Http\Controllers\JadwalPosyanduController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WargaController;
+use App\Http\Controllers\KaderPosyanduController;
+use App\Http\Controllers\LayananPosyanduController;
+use App\Http\Controllers\CatatanImunisasiController;
 
 
 
@@ -15,6 +19,10 @@ Route::get('/', function () {
 
 Route::resource('posyandu', PosyanduController::class);
 Route::resource('jadwal_posyandu', JadwalPosyanduController::class);
+Route::resource('warga', WargaController::class);
+Route::resource('kader-posyandu', KaderPosyanduController::class);
+Route::resource('layanan-posyandu', LayananPosyanduController::class);
+Route::resource('catatan-imunisasi', CatatanImunisasiController::class);
 
 Route::get('dashboard', [DashboardController::class, 'index'])
 ->name('dashboard')
