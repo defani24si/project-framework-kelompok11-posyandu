@@ -23,6 +23,126 @@
             @endif
         </div>
         <div class="card-body">
+            <!-- FORM FILTER & SEARCH -->
+            <form method="GET" action="{{ route('catatan-imunisasi.index') }}" class="mb-4">
+                <div class="row">
+                    <!-- SEARCH INPUT -->
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <input type="text" name="search" class="form-control" 
+                                   value="{{ request('search') }}" 
+                                   placeholder="Cari nama warga, vaksin, lokasi..." 
+                                   aria-label="Search">
+                            <button type="submit" class="btn btn-outline-primary">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            @if(request('search'))
+                                <a href="{{ request()->fullUrlWithQuery(['search'=> null]) }}" 
+                                   class="btn btn-outline-secondary" 
+                                   title="Hapus pencarian">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+                    
+                    <!-- FILTER JENIS VAKSIN -->
+                    <div class="col-md-2">
+                        <select name="jenis_vaksin" class="form-select" onchange="this.form.submit()">
+                            <option value="">Semua Vaksin</option>
+                            @foreach($jenisVaksinList as $vaksin)
+                                <option value="{{ $vaksin }}" {{ request('jenis_vaksin') == $vaksin ? 'selected' : '' }}>
+                                    {{ $vaksin }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                    <!-- FILTER LOKASI -->
+                    <div class="col-md-2">
+                        <select name="lokasi" class="form-select" onchange="this.form.submit()">
+                            <option value="">Semua Lokasi</option>
+                            @foreach($lokasiList as $lokasi)
+                                <option value="{{ $lokasi }}" {{ request('lokasi') == $lokasi ? 'selected' : '' }}>
+                                    {{ $lokasi }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- FILTER KARTU SCAN -->
+                    <div class="col-md-2">
+                        <select name="kartu_scan" class="form-select" onchange="this.form.submit()">
+                            <option value="">Semua Kartu</option>
+                            <option value="ada" {{ request('kartu_scan') == 'ada' ? 'selected' : '' }}>Ada Scan</option>
+                            <option value="tidak_ada" {{ request('kartu_scan') == 'tidak_ada' ? 'selected' : '' }}>Tidak Ada</option>
+                        </select>
+                    </div>
+                    
+                    <!-- RESET BUTTON -->
+                    <div class="col-md-2">
+                        <a href="{{ route('catatan-imunisasi.index') }}" class="btn btn-secondary w-100">Reset</a>
+                    </div>
+                </div>
+
+                <!-- Advanced Filters -->
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <button type="button" class="btn btn-sm btn-outline-info" data-bs-toggle="collapse" data-bs-target="#advancedFilters">
+                            <i class="fa fa-filter"></i> Filter Lanjutan
+                        </button>
+                    </div>
+                </div>
+
+                <div class="collapse mt-3" id="advancedFilters">
+                    <div class="card card-body bg-light">
+                        <div class="row">
+                            <!-- FILTER TANGGAL -->
+                            <div class="col-md-3">
+                                <label class="form-label">Tanggal Mulai</label>
+                                <input type="date" name="tanggal_mulai" class="form-control" 
+                                       value="{{ request('tanggal_mulai') }}">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Tanggal Akhir</label>
+                                <input type="date" name="tanggal_akhir" class="form-control" 
+                                       value="{{ request('tanggal_akhir') }}">
+                            </div>
+
+                            <!-- FILTER NAKES -->
+                            <div class="col-md-3">
+                                <label class="form-label">Tenaga Kesehatan</label>
+                                <select name="nakes" class="form-select">
+                                    <option value="">Semua Nakes</option>
+                                    @foreach($nakesList as $nakes)
+                                        <option value="{{ $nakes }}" {{ request('nakes') == $nakes ? 'selected' : '' }}>
+                                            {{ $nakes }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <!-- SORTING -->
+                            <div class="col-md-2">
+                                <label class="form-label">Urutkan</label>
+                                <select name="sort_by" class="form-select">
+                                    <option value="tanggal" {{ request('sort_by') == 'tanggal' ? 'selected' : '' }}>Tanggal</option>
+                                    <option value="jenis_vaksin" {{ request('sort_by') == 'jenis_vaksin' ? 'selected' : '' }}>Jenis Vaksin</option>
+                                    <option value="lokasi" {{ request('sort_by') == 'lokasi' ? 'selected' : '' }}>Lokasi</option>
+                                    <option value="created_at" {{ request('sort_by') == 'created_at' ? 'selected' : '' }}>Input</option>
+                                </select>
+                            </div>
+                            <div class="col-md-1">
+                                <label class="form-label">&nbsp;</label>
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fa fa-filter"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
                     <thead>
@@ -90,13 +210,14 @@
             </div>
             
             <div class="card-footer clearfix">
-                {{ $catatanImunisasi->links('pagination::bootstrap-5') }}
+                {{ $catatanImunisasi->links('pagination.custom') }}
             </div>
         </div>
     </div>
 @stop
 
 @section('css')
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .card-header {
             border-bottom: none;
@@ -134,4 +255,8 @@
             padding: 0.4em 0.8em;
         }
     </style>
+@stop
+
+@section('js')
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 @stop

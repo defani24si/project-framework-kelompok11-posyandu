@@ -12,10 +12,73 @@ class CatatanImunisasiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $catatanImunisasi = CatatanImunisasi::with('warga')->paginate(10);
-        return view('catatan-imunisasi.index', compact('catatanImunisasi'));
+        $query = CatatanImunisasi::with('warga');
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('jenis_vaksin', 'like', "%{$search}%")
+                  ->orWhere('lokasi', 'like', "%{$search}%")
+                  ->orWhere('nakes', 'like', "%{$search}%")
+                  ->orWhereHas('warga', function($wargaQuery) use ($search) {
+                      $wargaQuery->where('nama', 'like', "%{$search}%")
+                                 ->orWhere('nik', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        // Filter by Jenis Vaksin
+        if ($request->filled('jenis_vaksin')) {
+            $query->where('jenis_vaksin', 'like', "%{$request->jenis_vaksin}%");
+        }
+
+        // Filter by Lokasi
+        if ($request->filled('lokasi')) {
+            $query->where('lokasi', 'like', "%{$request->lokasi}%");
+        }
+
+        // Filter by Date Range
+        if ($request->filled('tanggal_mulai')) {
+            $query->where('tanggal', '>=', $request->tanggal_mulai);
+        }
+
+        if ($request->filled('tanggal_akhir')) {
+            $query->where('tanggal', '<=', $request->tanggal_akhir);
+        }
+
+        // Filter by Kartu Scan
+        if ($request->filled('kartu_scan')) {
+            if ($request->kartu_scan === 'ada') {
+                $query->whereNotNull('kartu_imunisasi_scan');
+            } elseif ($request->kartu_scan === 'tidak_ada') {
+                $query->whereNull('kartu_imunisasi_scan');
+            }
+        }
+
+        // Filter by Nakes
+        if ($request->filled('nakes')) {
+            $query->where('nakes', 'like', "%{$request->nakes}%");
+        }
+
+        // Sorting
+        $sortBy = $request->get('sort_by', 'tanggal');
+        $sortOrder = $request->get('sort_order', 'desc');
+        
+        if (in_array($sortBy, ['tanggal', 'jenis_vaksin', 'lokasi', 'nakes', 'created_at'])) {
+            $query->orderBy($sortBy, $sortOrder);
+        }
+
+        $catatanImunisasi = $query->paginate(10)->withQueryString();
+        
+        // Get data for filters
+        $jenisVaksinList = CatatanImunisasi::distinct()->pluck('jenis_vaksin')->filter();
+        $lokasiList = CatatanImunisasi::distinct()->pluck('lokasi')->filter();
+        $nakesList = CatatanImunisasi::distinct()->pluck('nakes')->filter();
+        
+        return view('catatan-imunisasi.index', compact('catatanImunisasi', 'jenisVaksinList', 'lokasiList', 'nakesList'));
     }
 
     /**

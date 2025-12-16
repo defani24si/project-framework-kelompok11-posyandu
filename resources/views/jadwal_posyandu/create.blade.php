@@ -9,7 +9,7 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('jadwal_posyandu.store') }}" method="POST">
+            <form action="{{ route('jadwal_posyandu.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <!-- Pilih Posyandu -->
@@ -55,9 +55,44 @@
                     @enderror
                 </div>
 
+                <!-- Poster Kegiatan -->
+                <div class="form-group">
+                    <label for="poster_kegiatan">Poster Kegiatan</label>
+                    <input type="file" name="poster_kegiatan" id="poster_kegiatan" 
+                           class="form-control-file @error('poster_kegiatan') is-invalid @enderror" 
+                           accept="image/*" onchange="previewPoster(this)">
+                    <small class="form-text text-muted">Format: JPG, PNG, GIF. Maksimal 2MB</small>
+                    @error('poster_kegiatan')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                    
+                    <!-- Preview -->
+                    <div id="posterPreview" class="mt-3" style="display: none;">
+                        <img id="previewImage" src="" alt="Preview Poster" 
+                             class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
+                    </div>
+                </div>
+
                 <button type="submit" class="btn btn-primary">Simpan</button>
                 <a href="{{ route('jadwal_posyandu.index') }}" class="btn btn-secondary">Kembali</a>
             </form>
         </div>
     </div>
+@stop
+
+@section('js')
+    <script>
+        function previewPoster(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    document.getElementById('previewImage').src = e.target.result;
+                    document.getElementById('posterPreview').style.display = 'block';
+                }
+                
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
 @stop

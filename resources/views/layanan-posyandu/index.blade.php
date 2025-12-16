@@ -23,6 +23,127 @@
             @endif
         </div>
         <div class="card-body">
+            <!-- FORM FILTER & SEARCH -->
+            <form method="GET" action="{{ route('layanan-posyandu.index') }}" class="mb-4">
+                <div class="row">
+                    <!-- SEARCH INPUT -->
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <input type="text" name="search" class="form-control" 
+                                   value="{{ request('search') }}" 
+                                   placeholder="Cari nama warga, posyandu, vitamin..." 
+                                   aria-label="Search">
+                            <button type="submit" class="btn btn-outline-primary">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            @if(request('search'))
+                                <a href="{{ request()->fullUrlWithQuery(['search'=> null]) }}" 
+                                   class="btn btn-outline-secondary" 
+                                   title="Hapus pencarian">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+                    
+                    <!-- FILTER POSYANDU -->
+                    <div class="col-md-3">
+                        <select name="posyandu_id" class="form-select" onchange="this.form.submit()">
+                            <option value="">Semua Posyandu</option>
+                            @foreach($posyandu as $item)
+                                <option value="{{ $item->posyandu_id }}" 
+                                    {{ request('posyandu_id') == $item->posyandu_id ? 'selected' : '' }}>
+                                    {{ $item->nama }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                    <!-- FILTER VITAMIN -->
+                    <div class="col-md-2">
+                        <select name="vitamin" class="form-select" onchange="this.form.submit()">
+                            <option value="">Semua Vitamin</option>
+                            <option value="ada" {{ request('vitamin') == 'ada' ? 'selected' : '' }}>Ada Vitamin</option>
+                            <option value="tidak_ada" {{ request('vitamin') == 'tidak_ada' ? 'selected' : '' }}>Tidak Ada</option>
+                        </select>
+                    </div>
+
+                    <!-- TANGGAL -->
+                    <div class="col-md-2">
+                        <input type="date" name="tanggal_mulai" class="form-control" 
+                               value="{{ request('tanggal_mulai') }}" 
+                               placeholder="Tanggal Mulai"
+                               onchange="this.form.submit()">
+                    </div>
+                    
+                    <!-- RESET BUTTON -->
+                    <div class="col-md-1">
+                        <a href="{{ route('layanan-posyandu.index') }}" class="btn btn-secondary w-100">Reset</a>
+                    </div>
+                </div>
+
+                <!-- Advanced Filters -->
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <button type="button" class="btn btn-sm btn-outline-info" data-bs-toggle="collapse" data-bs-target="#advancedFilters">
+                            <i class="fa fa-filter"></i> Filter Lanjutan
+                        </button>
+                    </div>
+                </div>
+
+                <div class="collapse mt-3" id="advancedFilters">
+                    <div class="card card-body bg-light">
+                        <div class="row">
+                            <!-- FILTER TANGGAL AKHIR -->
+                            <div class="col-md-2">
+                                <label class="form-label">Tanggal Akhir</label>
+                                <input type="date" name="tanggal_akhir" class="form-control" 
+                                       value="{{ request('tanggal_akhir') }}">
+                            </div>
+
+                            <!-- FILTER BERAT -->
+                            <div class="col-md-2">
+                                <label class="form-label">Berat Min (kg)</label>
+                                <input type="number" step="0.1" name="berat_min" class="form-control" 
+                                       value="{{ request('berat_min') }}" placeholder="0">
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Berat Max (kg)</label>
+                                <input type="number" step="0.1" name="berat_max" class="form-control" 
+                                       value="{{ request('berat_max') }}" placeholder="100">
+                            </div>
+
+                            <!-- FILTER TINGGI -->
+                            <div class="col-md-2">
+                                <label class="form-label">Tinggi Min (cm)</label>
+                                <input type="number" step="0.1" name="tinggi_min" class="form-control" 
+                                       value="{{ request('tinggi_min') }}" placeholder="0">
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Tinggi Max (cm)</label>
+                                <input type="number" step="0.1" name="tinggi_max" class="form-control" 
+                                       value="{{ request('tinggi_max') }}" placeholder="200">
+                            </div>
+
+                            <!-- SORTING -->
+                            <div class="col-md-1">
+                                <label class="form-label">Urutan</label>
+                                <select name="sort_order" class="form-select">
+                                    <option value="desc" {{ request('sort_order') == 'desc' ? 'selected' : '' }}>Terbaru</option>
+                                    <option value="asc" {{ request('sort_order') == 'asc' ? 'selected' : '' }}>Terlama</option>
+                                </select>
+                            </div>
+                            <div class="col-md-1">
+                                <label class="form-label">&nbsp;</label>
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fa fa-filter"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
                     <thead>
@@ -82,13 +203,14 @@
             </div>
             
             <div class="card-footer clearfix">
-                {{ $layananPosyandu->links('pagination::bootstrap-5') }}
+                {{ $layananPosyandu->links('pagination.custom') }}
             </div>
         </div>
     </div>
 @stop
 
 @section('css')
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .card-header {
             border-bottom: none;
@@ -122,4 +244,8 @@
             border-radius: 8px;
         }
     </style>
+@stop
+
+@section('js')
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 @stop

@@ -152,7 +152,7 @@
             </div>
             
             <div class="card-footer clearfix">
-                {{ $posyandus->withQueryString()->links('pagination::bootstrap-5') }}
+                {{ $posyandus->withQueryString()->links('pagination.custom') }}
             </div>
         </div>
     </div>

@@ -9,7 +9,7 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('jadwal_posyandu.update', $jadwalPosyandu->jadwal_id) }}" method="POST">
+            <form action="{{ route('jadwal_posyandu.update', $jadwalPosyandu->jadwal_id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -47,9 +47,65 @@
                     <textarea name="keterangan" class="form-control">{{ old('keterangan', $jadwalPosyandu->keterangan) }}</textarea>
                 </div>
 
+                <!-- Poster Kegiatan -->
+                <div class="form-group">
+                    <label for="poster_kegiatan">Poster Kegiatan</label>
+                    
+                    @if($jadwalPosyandu->poster_kegiatan)
+                        <div class="mb-3">
+                            <img src="{{ asset('storage/' . $jadwalPosyandu->poster_kegiatan) }}" 
+                                 alt="Poster Saat Ini" 
+                                 class="img-thumbnail"
+                                 style="max-width: 200px; max-height: 200px;">
+                            <div class="mt-2">
+                                <form action="{{ route('jadwal_posyandu.poster.delete', $jadwalPosyandu->jadwal_id) }}" 
+                                      method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger" 
+                                            onclick="return confirm('Yakin ingin menghapus poster?')">
+                                        <i class="fas fa-trash"></i> Hapus Poster
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    @endif
+                    
+                    <input type="file" name="poster_kegiatan" id="poster_kegiatan" 
+                           class="form-control-file @error('poster_kegiatan') is-invalid @enderror" 
+                           accept="image/*" onchange="previewPoster(this)">
+                    <small class="form-text text-muted">Format: JPG, PNG, GIF. Maksimal 2MB</small>
+                    @error('poster_kegiatan')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                    
+                    <!-- Preview -->
+                    <div id="posterPreview" class="mt-3" style="display: none;">
+                        <img id="previewImage" src="" alt="Preview Poster" 
+                             class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
+                    </div>
+                </div>
+
                 <button type="submit" class="btn btn-primary">Update</button>
                 <a href="{{ route('jadwal_posyandu.index') }}" class="btn btn-secondary">Kembali</a>
             </form>
         </div>
     </div>
+@stop
+
+@section('js')
+<script>
+function previewPoster(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        
+        reader.onload = function(e) {
+            document.getElementById('previewImage').src = e.target.result;
+            document.getElementById('posterPreview').style.display = 'block';
+        }
+        
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
 @stop

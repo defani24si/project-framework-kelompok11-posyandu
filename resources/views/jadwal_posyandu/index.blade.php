@@ -102,6 +102,7 @@
                             <th>Posyandu</th>
                             <th>Tanggal</th>
                             <th>Tema</th>
+                            <th>Poster</th>
                             <th>Keterangan</th>
                             <th width="150" class="text-center">Aksi</th>
                         </tr>
@@ -113,6 +114,20 @@
                             <td>{{ $item->posyandu->nama ?? '-' }}</td>
                             <td>{{ \Carbon\Carbon::parse($item->tanggal)->format('d/m/Y') }}</td>
                             <td>{{ $item->tema }}</td>
+                            <td class="text-center">
+                                @if($item->poster_kegiatan)
+                                    <img src="{{ asset('storage/' . $item->poster_kegiatan) }}" 
+                                         alt="Poster Kegiatan" 
+                                         class="img-thumbnail"
+                                         style="width: 50px; height: 50px; object-fit: cover; cursor: pointer;"
+                                         onclick="showPosterModal('{{ asset('storage/' . $item->poster_kegiatan) }}', '{{ $item->tema }}')">
+                                @else
+                                    <span class="text-muted">
+                                        <i class="fas fa-image"></i><br>
+                                        <small>Tidak ada</small>
+                                    </span>
+                                @endif
+                            </td>
                             <td>{{ $item->keterangan ?? '-' }}</td>
                             <td class="text-center">
                                 <div class="btn-group">
@@ -136,7 +151,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center text-muted py-4">
+                            <td colspan="7" class="text-center text-muted py-4">
                                 <i class="fa fa-database fa-2x mb-2"></i><br>
                                 Tidak ada data jadwal posyandu
                             </td>
@@ -147,7 +162,30 @@
             </div>
             
             <div class="card-footer clearfix">
-                {{ $jadwals->withQueryString()->links('pagination::bootstrap-5') }}
+                {{ $jadwals->withQueryString()->links('pagination.custom') }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal untuk menampilkan poster -->
+    <div class="modal fade" id="posterModal" tabindex="-1" role="dialog" aria-labelledby="posterModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="posterModalLabel">Poster Kegiatan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalPosterImage" src="" alt="Poster Kegiatan" class="img-fluid">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                    <a id="downloadPoster" href="" download class="btn btn-primary">
+                        <i class="fas fa-download"></i> Download
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -250,5 +288,23 @@
             border-radius: 6px;
             color: #155724;
         }
+        .img-thumbnail {
+            border: 2px solid #007bff;
+            transition: transform 0.3s ease;
+        }
+        .img-thumbnail:hover {
+            transform: scale(1.1);
+        }
     </style>
+@stop
+
+@section('js')
+    <script>
+        function showPosterModal(imageSrc, title) {
+            $('#modalPosterImage').attr('src', imageSrc);
+            $('#posterModalLabel').text('Poster: ' + title);
+            $('#downloadPoster').attr('href', imageSrc);
+            $('#posterModal').modal('show');
+        }
+    </script>
 @stop

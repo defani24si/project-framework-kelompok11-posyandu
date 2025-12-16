@@ -19,6 +19,7 @@ Route::get('/', function () {
 
 Route::resource('posyandu', PosyanduController::class);
 Route::resource('jadwal_posyandu', JadwalPosyanduController::class);
+Route::delete('jadwal_posyandu/{id}/poster', [App\Http\Controllers\JadwalPosyanduController::class, 'deletePoster'])->name('jadwal_posyandu.poster.delete');
 Route::resource('warga', WargaController::class);
 Route::resource('kader-posyandu', KaderPosyanduController::class);
 Route::resource('layanan-posyandu', LayananPosyanduController::class);
@@ -34,3 +35,12 @@ Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
 Route::resource('users', UserController::class);
+
+// Profile Routes
+Route::middleware('auth')->group(function () {
+    Route::get('profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
+    Route::get('profile/edit', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::put('profile/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password');
+    Route::delete('profile/photo', [App\Http\Controllers\ProfileController::class, 'deletePhoto'])->name('profile.photo.delete');
+});

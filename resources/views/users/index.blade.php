@@ -108,7 +108,7 @@
             </div>
             
             <div class="card-footer clearfix">
-                {{ $users->withQueryString()->links('pagination::bootstrap-5') }}
+                {{ $users->withQueryString()->links('pagination.custom') }}
             </div>
         </div>
     </div>

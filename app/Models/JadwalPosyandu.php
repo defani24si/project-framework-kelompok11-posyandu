@@ -18,6 +18,7 @@ class JadwalPosyandu extends Model
         'tanggal',
         'tema',
         'keterangan',
+        'poster_kegiatan',
     ];
 
     /**

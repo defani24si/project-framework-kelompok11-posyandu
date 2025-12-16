@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\LayananPosyandu;
 use App\Models\JadwalPosyandu;
+use App\Models\Posyandu;
 use App\Models\Warga;
 use Illuminate\Http\Request;
 
@@ -12,10 +13,98 @@ class LayananPosyanduController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $layananPosyandu = LayananPosyandu::with(['jadwal.posyandu', 'warga'])->paginate(10);
-        return view('layanan-posyandu.index', compact('layananPosyandu'));
+        $query = LayananPosyandu::with(['jadwal.posyandu', 'warga']);
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('vitamin', 'like', "%{$search}%")
+                  ->orWhere('konseling', 'like', "%{$search}%")
+                  ->orWhereHas('warga', function($wargaQuery) use ($search) {
+                      $wargaQuery->where('nama', 'like', "%{$search}%")
+                                 ->orWhere('nik', 'like', "%{$search}%");
+                  })
+                  ->orWhereHas('jadwal.posyandu', function($posyanduQuery) use ($search) {
+                      $posyanduQuery->where('nama', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        // Filter by Posyandu
+        if ($request->filled('posyandu_id')) {
+            $query->whereHas('jadwal', function($jadwalQuery) use ($request) {
+                $jadwalQuery->where('posyandu_id', $request->posyandu_id);
+            });
+        }
+
+        // Filter by Date Range
+        if ($request->filled('tanggal_mulai')) {
+            $query->whereHas('jadwal', function($jadwalQuery) use ($request) {
+                $jadwalQuery->where('tanggal', '>=', $request->tanggal_mulai);
+            });
+        }
+
+        if ($request->filled('tanggal_akhir')) {
+            $query->whereHas('jadwal', function($jadwalQuery) use ($request) {
+                $jadwalQuery->where('tanggal', '<=', $request->tanggal_akhir);
+            });
+        }
+
+        // Filter by Berat Range
+        if ($request->filled('berat_min')) {
+            $query->where('berat', '>=', $request->berat_min);
+        }
+
+        if ($request->filled('berat_max')) {
+            $query->where('berat', '<=', $request->berat_max);
+        }
+
+        // Filter by Tinggi Range
+        if ($request->filled('tinggi_min')) {
+            $query->where('tinggi', '>=', $request->tinggi_min);
+        }
+
+        if ($request->filled('tinggi_max')) {
+            $query->where('tinggi', '<=', $request->tinggi_max);
+        }
+
+        // Filter by Vitamin
+        if ($request->filled('vitamin')) {
+            if ($request->vitamin === 'ada') {
+                $query->whereNotNull('vitamin')->where('vitamin', '!=', '');
+            } elseif ($request->vitamin === 'tidak_ada') {
+                $query->where(function($q) {
+                    $q->whereNull('vitamin')->orWhere('vitamin', '');
+                });
+            }
+        }
+
+        // Sorting
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        
+        if (in_array($sortBy, ['berat', 'tinggi', 'created_at'])) {
+            $query->orderBy($sortBy, $sortOrder);
+        } elseif ($sortBy === 'tanggal') {
+            $query->join('jadwal_posyandu', 'layanan_posyandu.jadwal_id', '=', 'jadwal_posyandu.jadwal_id')
+                  ->orderBy('jadwal_posyandu.tanggal', $sortOrder)
+                  ->select('layanan_posyandu.*');
+        }
+
+        $layananPosyandu = $query->paginate(10)->withQueryString();
+        
+        // Get data for filters
+        $posyandu = Posyandu::all();
+        $vitaminList = LayananPosyandu::whereNotNull('vitamin')
+                                     ->where('vitamin', '!=', '')
+                                     ->distinct()
+                                     ->pluck('vitamin')
+                                     ->filter();
+        
+        return view('layanan-posyandu.index', compact('layananPosyandu', 'posyandu', 'vitaminList'));
     }
 
     /**

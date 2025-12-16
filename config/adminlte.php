@@ -262,7 +262,7 @@ return [
     'register_url'                            => 'register',
     'password_reset_url'                      => 'password/reset',
     'password_email_url'                      => 'password/email',
-    'profile_url'                             => false,
+    'profile_url'                             => 'profile',
     'disable_darkmode_routes'                 => false,
 
     /*
@@ -322,36 +322,10 @@ return [
         'icon'   => 'fas fa-tachometer-alt',
         'active' => ['dashboard', 'home'], // aktif jika route dashboard atau home
     ],
-     [
-        'text'    => 'Manajemen User',
-        'icon'    => 'fas fa-users',
-        'can'     => 'admin', // Hanya admin yang bisa akses
-        'submenu' => [
-            [
-                'text' => 'Daftar User',
-                'url'  => 'users',
-                'icon' => 'fas fa-list',
-            ],
-            [
-                'text' => 'Tambah User',
-                'url'  => 'users/create',
-                'icon' => 'fas fa-plus-circle',
-            ],
-            [
-                'text' => 'Role & Permission',
-                'url'  => 'users/roles',
-                'icon' => 'fas fa-user-shield',
-            ],
-        ],
-    ],
+
     
     // Menu utama
-  [
-        'text' => 'Kelola User',
-        'url'  => '/users',             // atau route('users.index')
-        'icon' => 'fas fa-users',
-        'active' => ['users', 'users/*'],
-    ],
+  
     [
         'text'   => 'Posyandu',
         'url'    => 'posyandu',
@@ -371,6 +345,12 @@ return [
     'active' => ['kader-posyandu*'],
 ],
 [
+    'text'   => 'Data Warga',
+    'url'    => 'warga',
+    'icon'   => 'fas fa-user-friends',
+    'active' => ['warga*'],
+],
+[
     'text'   => 'Layanan Posyandu',
     'url'    => 'layanan-posyandu',
     'icon'   => 'fas fa-hand-holding-medical',
@@ -382,30 +362,35 @@ return [
     'icon'   => 'fas fa-syringe',
     'active' => ['catatan-imunisasi*'],
 ],
-[
-    'text'   => 'Data Warga',
-    'url'    => 'warga',
-    'icon'   => 'fas fa-user-friends',
-    'active' => ['warga*'],
-],
+
 
     // Header info tambahan
-    ['header' => 'Info & Tips'],
+    ['header' => 'Menu Tambahan'],
     [
-        'text'       => 'Tips Kesehatan',
-        'icon_color' => 'green',
-        'url'        => '#',
+        'text'    => 'Kelola User',
+        'icon'    => 'fas fa-users',
+        'submenu' => [
+            [
+                'text' => 'Daftar User',
+                'url'  => 'users',
+                'icon' => 'fas fa-list',
+                'active' => ['users', 'users/index'],
+            ],
+            [
+                'text' => 'Tambah User',
+                'url'  => 'users/create',
+                'icon' => 'fas fa-plus-circle',
+                'active' => ['users/create'],
+            ],
+            [
+                'text' => 'Profil Saya',
+                'url'  => 'profile',
+                'icon' => 'fas fa-user-circle',
+                'active' => ['profile', 'profile/*'],
+            ],
+        ],
     ],
-    [
-        'text'       => 'Pengumuman',
-        'icon_color' => 'yellow',
-        'url'        => '#',
-    ],
-    [
-        'text'       => 'Kontak Darurat',
-        'icon_color' => 'red',
-        'url'        => '#',
-    ],
+   
 ],
 
     /*

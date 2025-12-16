@@ -23,6 +23,124 @@
             @endif
         </div>
         <div class="card-body">
+            <!-- FORM FILTER & SEARCH -->
+            <form method="GET" action="{{ route('warga.index') }}" class="mb-4">
+                <div class="row">
+                    <!-- SEARCH INPUT -->
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <input type="text" name="search" class="form-control" 
+                                   value="{{ request('search') }}" 
+                                   placeholder="Cari NIK, nama, alamat..." 
+                                   aria-label="Search">
+                            <button type="submit" class="btn btn-outline-primary">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            @if(request('search'))
+                                <a href="{{ request()->fullUrlWithQuery(['search'=> null]) }}" 
+                                   class="btn btn-outline-secondary" 
+                                   title="Hapus pencarian">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+                    
+                    <!-- FILTER RT -->
+                    <div class="col-md-2">
+                        <select name="rt" class="form-select" onchange="this.form.submit()">
+                            <option value="">Semua RT</option>
+                            @for($i = 1; $i <= 20; $i++)
+                                <option value="{{ str_pad($i, 3, '0', STR_PAD_LEFT) }}" 
+                                    {{ request('rt') == str_pad($i, 3, '0', STR_PAD_LEFT) ? 'selected' : '' }}>
+                                    RT {{ str_pad($i, 3, '0', STR_PAD_LEFT) }}
+                                </option>
+                            @endfor
+                        </select>
+                    </div>
+                    
+                    <!-- FILTER RW -->
+                    <div class="col-md-2">
+                        <select name="rw" class="form-select" onchange="this.form.submit()">
+                            <option value="">Semua RW</option>
+                            @for($i = 1; $i <= 20; $i++)
+                                <option value="{{ str_pad($i, 3, '0', STR_PAD_LEFT) }}" 
+                                    {{ request('rw') == str_pad($i, 3, '0', STR_PAD_LEFT) ? 'selected' : '' }}>
+                                    RW {{ str_pad($i, 3, '0', STR_PAD_LEFT) }}
+                                </option>
+                            @endfor
+                        </select>
+                    </div>
+
+                    <!-- FILTER JENIS KELAMIN -->
+                    <div class="col-md-2">
+                        <select name="jenis_kelamin" class="form-select" onchange="this.form.submit()">
+                            <option value="">Semua JK</option>
+                            <option value="L" {{ request('jenis_kelamin') == 'L' ? 'selected' : '' }}>Laki-laki</option>
+                            <option value="P" {{ request('jenis_kelamin') == 'P' ? 'selected' : '' }}>Perempuan</option>
+                        </select>
+                    </div>
+                    
+                    <!-- RESET BUTTON -->
+                    <div class="col-md-2">
+                        <a href="{{ route('warga.index') }}" class="btn btn-secondary w-100">Reset</a>
+                    </div>
+                </div>
+
+                <!-- Advanced Filters (Collapsible) -->
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <button type="button" class="btn btn-sm btn-outline-info" data-bs-toggle="collapse" data-bs-target="#advancedFilters">
+                            <i class="fa fa-filter"></i> Filter Lanjutan
+                        </button>
+                    </div>
+                </div>
+
+                <div class="collapse mt-3" id="advancedFilters">
+                    <div class="card card-body bg-light">
+                        <div class="row">
+                            <!-- FILTER UMUR -->
+                            <div class="col-md-3">
+                                <label class="form-label">Umur Minimum</label>
+                                <input type="number" name="umur_min" class="form-control" 
+                                       value="{{ request('umur_min') }}" placeholder="0" min="0" max="100">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Umur Maksimum</label>
+                                <input type="number" name="umur_max" class="form-control" 
+                                       value="{{ request('umur_max') }}" placeholder="100" min="0" max="100">
+                            </div>
+
+                            <!-- SORTING -->
+                            <div class="col-md-3">
+                                <label class="form-label">Urutkan Berdasarkan</label>
+                                <select name="sort_by" class="form-select">
+                                    <option value="nama" {{ request('sort_by') == 'nama' ? 'selected' : '' }}>Nama</option>
+                                    <option value="nik" {{ request('sort_by') == 'nik' ? 'selected' : '' }}>NIK</option>
+                                    <option value="tanggal_lahir" {{ request('sort_by') == 'tanggal_lahir' ? 'selected' : '' }}>Tanggal Lahir</option>
+                                    <option value="rt" {{ request('sort_by') == 'rt' ? 'selected' : '' }}>RT</option>
+                                    <option value="rw" {{ request('sort_by') == 'rw' ? 'selected' : '' }}>RW</option>
+                                    <option value="created_at" {{ request('sort_by') == 'created_at' ? 'selected' : '' }}>Tanggal Input</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Urutan</label>
+                                <select name="sort_order" class="form-select">
+                                    <option value="asc" {{ request('sort_order') == 'asc' ? 'selected' : '' }}>A-Z</option>
+                                    <option value="desc" {{ request('sort_order') == 'desc' ? 'selected' : '' }}>Z-A</option>
+                                </select>
+                            </div>
+                            <div class="col-md-1">
+                                <label class="form-label">&nbsp;</label>
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fa fa-filter"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
                     <thead>
@@ -84,13 +202,15 @@
             </div>
             
             <div class="card-footer clearfix">
-                {{ $warga->links('pagination::bootstrap-5') }}
+                {{ $warga->links('pagination.custom') }}
             </div>
         </div>
     </div>
 @stop
 
 @section('css')
+    <!-- Bootstrap CSS for collapse -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .card-header {
             border-bottom: none;
@@ -128,4 +248,9 @@
             color: white;
         }
     </style>
+@stop
+
+@section('js')
+    <!-- Bootstrap JS for collapse -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 @stop
